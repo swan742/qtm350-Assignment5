@@ -1,0 +1,64 @@
+---
+title: "05-assignment-QTM350-Report"
+author: "Chrissy Wang"
+date: last-modified
+format:
+  html: default
+  pdf: default
+bibliography: references.bib
+---
+## Introduction
+This report analyzes data from the World Bank [@worldbank2022] and used methods described by Wickham and Grolemund [@wickham2016].
+
+## Data Analysis Table
+
+```{python}
+import pandas as pd
+df = pd.read_csv('wdi.csv')
+
+table_stats = df[['gdp_per_capita', 'life_expectancy', 'unemployment_rate']].describe()
+table_stats
+```
+
+```markdown
+gdp_per_capita is distributed around the mean of 21142.747 with a std of 31040.301. The mean of life_expectancy is about 73.108, and its std is about 7.943. The average unemployment rate is about 7.197 with a std of 5.846.
+## Data Visualizations
+```
+
+```{python}
+#| label: fig-scatter-gdp-life
+#| fig-cap: "Relationship between GDP per Capita and Life Expectancy"
+#| echo: false
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+plt.scatter(df['gdp_per_capita'], df['life_expectancy'], alpha=0.5)
+plt.title('GDP vs Life Expectancy (2022)')
+plt.xlabel('GDP per Capita (USD)')
+plt.ylabel('Life Expectancy (Years)')
+plt.show()
+
+#| label: fig-bars
+#| fig-cap: "Top 10 Countries by Total Population (2022)."
+#| echo: false
+
+import seaborn as sns
+
+top_10_pop = df.nlargest(10, 'total_population')
+
+plt.figure(figsize=(10, 6))
+sns.barplot(data=top_10_pop, x='total_population', y='country')
+plt.title('Top 10 Countries by Population')
+plt.xlabel('Total Population')
+plt.ylabel('Country')
+plt.show()
+```
+
+```markdown
+## Conclusion
+As illustrated in @fig-scatter-gdp-life, there is a positive trend between 
+national wealth and health outcomes. Countries with higher GDP per capita 
+generally report higher life expectancy. The absolute value of the slope is decreasing.
+The distribution of global population is highly concentrated. In @fig-bars, 
+we can see that the top few countries (India and China) have significantly larger populations than the rest of the world.
+```
